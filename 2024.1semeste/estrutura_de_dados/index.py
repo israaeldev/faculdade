@@ -5,8 +5,8 @@ from ui.menu import imprimirMenuPrincipal, limparTela
 
 
 
-contatos = {"nome" : "Diego", "numero" : 123}
-# contatos = []
+
+contatos = []
 
 # FUNÇÕES
 def AdicionarContato():
@@ -14,13 +14,13 @@ def AdicionarContato():
     nome = input("Digite o nome: ")
     numero = int(input("Digite o número: "))
 
-    # contatos.append({
-    #      "nome" : nome,
-    #      "numero" : numero
-    # })
+    contatos.append({
+         "nome" : nome,
+         "numero" : numero
+    })
 
 
-    contatos[nome] = numero
+    
     print("\n LISTA DE DICIONÁRIO")
     print(contatos)
 
@@ -37,17 +37,21 @@ def MostrarContatos():
 
 def EditarContato():
     busca_nome = input("Digite o Nome do contato que você deseja alterar: ")
-    if busca_nome in contatos.values():
-        escolha = int(input("Digite 1 pra editar nome 2 para editar o número: "))
-        
-        if escolha == 1:
-            busca_nome = input("Digite o nome do contato: ")
-            if nome_editado:
-                    contatos[nome_editado] = contatos.pop(busca_nome)
+    global contatos  
+    # if busca_nome in contatos.keys():
+    #     escolha = int(input("Digite 1 pra editar nome 2 para editar o número: "))
+    for contato in contatos:
+        if busca_nome == contato["nome"]:
+            escolha = int(input("Digite 1 pra editar nome 2 para editar o número: "))
+    
+            if escolha == 1:
+                busca_nome = input("Digite o nome do contato: ")
+                if nome_editado:
+                        contatos[nome_editado] = contatos.pop(busca_nome)
 
-        elif escolha == 2: 
-                numero_editado = input("Atualize aqui o número: ")
-                contatos =[nome_editado] = numero_editado
+            elif escolha == 2: 
+                    numero_editado = input("Atualize aqui o número: ")
+                    contatos =[nome_editado] = numero_editado
                 
 
     print("Contato editado com sucesso!")
