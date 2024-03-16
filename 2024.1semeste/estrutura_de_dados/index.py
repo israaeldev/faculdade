@@ -45,16 +45,19 @@ def EditarContato():
             escolha = int(input("Digite 1 pra editar nome 2 para editar o número: "))
     
             if escolha == 1:
-                busca_nome = input("Digite o nome do contato: ")
-                if nome_editado:
-                        contatos[nome_editado] = contatos.pop(busca_nome)
+                novo_nome = input("Digite um novo nome: ")
+                contato["nome"] = novo_nome
+                print("Nome Alterado com sucesso!")
 
             elif escolha == 2: 
-                    numero_editado = input("Atualize aqui o número: ")
-                    contatos =[nome_editado] = numero_editado
+                    numero_novo = int(input("Atualize aqui o número: "))
+                    contato['numero'] = numero_novo
+                    print('numero alterado com sucesso!')
+        else:
+            print('usuario nao encontrado')
                 
 
-    print("Contato editado com sucesso!")
+    
     input("[APERTE ENTER PARA CONTINUAR]")
     limparTela()
 
