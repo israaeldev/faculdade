@@ -10,21 +10,36 @@ contatos = []
 
 # FUNÇÕES
 def AdicionarContato():
+ 
     # ESCREVER LÓGICA AQUI!
+    global contatos
     nome = input("Digite o nome: ")
     numero = int(input("Digite o número: "))
+    usuario_existe = False
+    novo_usuario = {
+        "nome": nome,
+        "numero": numero
+    }
 
-    contatos.append({
-         "nome" : nome,
-         "numero" : numero
-    })
+    if len(contatos) >0:
+        for contato in contatos:
+            # verifica se o novo contato já está na base de dados
+            if  contato == novo_usuario:
+                usuario_existe = True
+                print("Contato já foi cadastrado na base de dados anteriormente.")
+                break
+            else:
+                usuario_existe = False
 
-
+        if usuario_existe == False:
+            contatos.append(novo_usuario)
+            print("Usuário Criado com Sucesso!")
+        
+    else:
+        # base de dados vazia, então adiciona o primeiro elemento
+        contatos.append(novo_usuario)
+        print("Usuário Criado com Sucesso!")
     
-    print("\n LISTA DE DICIONÁRIO")
-    print(contatos)
-
-    print("Usuário Criado com Sucesso!")
     input("[APERTE ENTER PARA CONTINUAR]")
     limparTela()
 
@@ -36,28 +51,36 @@ def MostrarContatos():
     limparTela()
 
 def EditarContato():
+    usuario_encontrado = False
+    usario_que_sera_editado = {}
     busca_nome = input("Digite o Nome do contato que você deseja alterar: ")
-    global contatos  
-    # if busca_nome in contatos.keys():
-    #     escolha = int(input("Digite 1 pra editar nome 2 para editar o número: "))
+
+    # varre a lista para procurar se o contato existe
     for contato in contatos:
         if busca_nome == contato["nome"]:
-            escolha = int(input("Digite 1 pra editar nome 2 para editar o número: "))
+            usuario_encontrado = True
+            usario_que_sera_editado = contato
+            break
     
-            if escolha == 1:
-                novo_nome = input("Digite um novo nome: ")
-                contato["nome"] = novo_nome
-                print("Nome Alterado com sucesso!")
 
-            elif escolha == 2: 
-                    numero_novo = int(input("Atualize aqui o número: "))
-                    contato['numero'] = numero_novo
-                    print('numero alterado com sucesso!')
-        else:
-            print('usuario nao encontrado')
-                
+    if usuario_encontrado == True:
+        #encontramos o usuario
+        escolha = int(input("Digite 1 pra editar nome 2 para editar o número: "))
 
-    
+        if escolha == 1:
+            novo_nome = input("Digite um novo nome: ")
+            usario_que_sera_editado["nome"] = novo_nome
+            print("Nome Alterado com sucesso!")
+
+        elif escolha == 2: 
+                numero_novo = int(input("Atualize aqui o número: "))
+                usario_que_sera_editado['numero'] = numero_novo
+                print('numero alterado com sucesso!')
+
+    else:
+        print('Contato não encontrado')
+           
+             
     input("[APERTE ENTER PARA CONTINUAR]")
     limparTela()
 
