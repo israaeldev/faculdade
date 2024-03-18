@@ -122,16 +122,18 @@ while not fimPrograma:
     imprimirMenuPrincipal()
     opcao = input("Escolha uma das opções: ")
 
-    if int(opcao) == 1:
-        AdicionarContato()
-    elif int(opcao) == 2:
-        MostrarContatos()
-    elif int(opcao) == 3:
-        EditarContato()
-    elif int(opcao) == 4:
-        EscreverMensagem()
-    elif int(opcao) == 0:
-        fimPrograma = True
+    if opcao in ("0", "1", "2", "3", "4"):
+        
+        if int(opcao) == 1:
+            AdicionarContato()
+        elif int(opcao) == 2:
+            MostrarContatos()
+        elif int(opcao) == 3:
+            EditarContato()
+        elif int(opcao) == 4:
+            EscreverMensagem()
+        elif int(opcao) == 0:
+            fimPrograma = True
     else:
         print("Opção Errada! Favor escolha uma opção válida")
         input("[APERTE ENTER PARA CONTINUAR]")
