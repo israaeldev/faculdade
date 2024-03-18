@@ -19,6 +19,7 @@ def AdicionarContato():
     novo_usuario = {
         "nome": nome,
         "numero": numero
+        
     }
 
     if len(contatos) >0:
@@ -46,7 +47,6 @@ def AdicionarContato():
 def MostrarContatos():
     # ESCREVER LÓGICA AQUI
     print(contatos)
-    print("Mostrando lista de contatos")
     input("[APERTE ENTER PARA CONTINUAR]")
     limparTela()
 
@@ -86,11 +86,30 @@ def EditarContato():
 
 def EscreverMensagem():
     # Exemplo de criação de uma mensagem
-    
-    destinatario = Contato("Contato para envio", "Numero para envio")
-    mensagem = Mensagem(destinatario, "Mensagem", "01/01/2024")
 
-    print("Mensagem Criada com Sucesso!")
+    usuario_encontrado = False
+    busca_nome = input("Digite o Nome do contato que você deseja adionar a mensagem: ")
+
+    # varre a lista para procurar se o contato existe
+    for contato in contatos:
+        if busca_nome == contato["nome"]:
+            usuario_encontrado = True
+            break
+
+    if usuario_encontrado == True:
+        msg = input("digite aqui sua mensagem: ")
+        if "mensagem" in contato:
+            contato["mensagem"].append(msg)   
+        
+        else: 
+            contato ["mensagem"] = [msg]    
+        print("Mensagem Criada com Sucesso!") 
+    else:
+        print("Usuário não encontrado")
+    
+    # destinatario = Contato("Contato para envio", "Numero para envio")
+    # mensagem = Mensagem(destinatario, "Mensagem", "01/01/2024")
+
     input("[APERTE ENTER PARA CONTINUAR]")
     limparTela()
 
