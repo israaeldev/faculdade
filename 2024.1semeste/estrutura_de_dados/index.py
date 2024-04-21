@@ -1,13 +1,14 @@
 from models.contato import Contato
 from models.mensagem import Mensagem
 from ui.menu import imprimirMenuPrincipal, limparTela
-
-
-
+from queue import Queue
+from datetime import datetime
 
 
 contatos = []
-
+mensagem = Queue()
+busca_nome_global = ""
+cont= 0
 # FUNÇÕES
 def AdicionarContato():
  
@@ -53,15 +54,14 @@ def MostrarContatos():
 def EditarContato():
     usuario_encontrado = False
     usario_que_sera_editado = {}
+   
     busca_nome = input("Digite o Nome do contato que você deseja alterar: ")
-
     # varre a lista para procurar se o contato existe
     for contato in contatos:
         if busca_nome == contato["nome"]:
             usuario_encontrado = True
             usario_que_sera_editado = contato
             break
-    
 
     if usuario_encontrado == True:
         #encontramos o usuario
@@ -84,54 +84,132 @@ def EditarContato():
     input("[APERTE ENTER PARA CONTINUAR]")
     limparTela()
 
-def EscreverMensagem():
-    # Exemplo de criação de uma mensagem
-
+def salvar_mensagem():
+    global busca_nome_global
     usuario_encontrado = False
     busca_nome = input("Digite o Nome do contato que você deseja adionar a mensagem: ")
-
-    # varre a lista para procurar se o contato existe
+    busca_nome_global = busca_nome
     for contato in contatos:
         if busca_nome == contato["nome"]:
             usuario_encontrado = True
             break
-
     if usuario_encontrado == True:
-        msg = input("digite aqui sua mensagem: ")
-        if "mensagem" in contato:
-            contato["mensagem"].append(msg)   
-        
-        else: 
-            contato ["mensagem"] = [msg]    
-        print("Mensagem Criada com Sucesso!") 
-    else:
-        print("Usuário não encontrado")
-    
-    # destinatario = Contato("Contato para envio", "Numero para envio")
-    # mensagem = Mensagem(destinatario, "Mensagem", "01/01/2024")
 
+        elemento = input("Digite a mensagem que deseja adicionar à fila: ")
+        data_hora = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+        mensagem.put([elemento, data_hora, busca_nome])
+        print("Elemento foi adicionado à fila, você já consegue ve a sua mensagem, ela é a última! ")
+        print("-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=")
+        for elemento in list(mensagem.queue):
+            print(elemento)
+        print("Quantidade de mensagem na fila: ",(mensagem.qsize()))
+        print("-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=")
+        input("Aperte enter para continuar")
+
+        return True
+
+    elif usuario_encontrado == False:
+        print("O usuário que você digitou não existe, tente novamente ")
+        input("Aperte enter para continuar")
+
+        return False
+
+def imprimir_mensagem():
+    print("Mensagem na fila:\n")
+    for elemento in list(mensagem.queue):
+            print(elemento)
+    print("Existe um total de",mensagem.qsize(),"Mesangens na fila")
+    print("\nMensagem impressa.")
     input("[APERTE ENTER PARA CONTINUAR]")
-    limparTela()
+
+def Enviarmensagem():
+    
+    if not mensagem.empty() == True:
+
+        usuario_encontrado = False
+        for contato in contatos:
+            if busca_nome_global == contato["nome"]:
+                usuario_encontrado = True
+                break
+
+        if usuario_encontrado == True:
+            print("Mensagens da fila: \n")
+            for elemento in list(mensagem.queue):
+                print(elemento,"\n")
+            escolha = input("Você deseja enviar a primeira mensagem S/N: ").upper()
+            msg = []
+            if escolha == "S":        
+                msg_excluida = mensagem.get()
+                msg.append(msg_excluida)
+
+                if "mensagem" in contato:
+                    contato["mensagem"].append(msg)
+                    print("Mensagem Enviada com Sucesso!")
+                    print("Quantidade de mensagem na fila: ",(mensagem.qsize()))
+                    print("Detalhes da mensgem enviada: ", msg_excluida)
+                    input("[APERTE ENTER PARA CONTINUAR]") 
+                
+                else: 
+                    contato ["mensagem"] = [msg]   
+                    print("Mensagem Enviada com Sucesso!")
+                    print("Quantidade de mensagem na fila: ",(mensagem.qsize()))
+                    print("Detalhes da mensgem enviada: ", msg_excluida)
+                    input("[APERTE ENTER PARA CONTINUAR]")
+            else:
+                print("OK, sua Mensagem não foi enviada")
+                input("[APERTE ENTER PARA CONTINUAR]")
+                # Enviarmensagem()
+                return
+        else:
+            print("Mensagem não enviada")
+            input("[APERTE ENTER PARA CONTINUAR]")
+            Enviarmensagem()
+    else:
+        print("Você não tem nenhuma mensagem em sua fila")
+        print("volte ao menu anterior e cadastre sua mensagem")
+        input("digite enter para continuar")
+        imprimirMenuPrincipal()
 
 # PROGRAMA PRINCIPAL
 print("===== SISTEMA DE MENSAGENS =====\n")
 
 fimPrograma = False
 
+def escrever_mensagem():
+    while True:
+        limparTela()
+        opcao = input("Escolha uma opção:\n 1. escrever mensagem para a fila\n 2. Mostrar mensagens da fila\n 3. Voltar ao menu anterior\nOpção: ")
+        if opcao == '1':
+            mensagem_foi_salva = salvar_mensagem()
+            if mensagem_foi_salva:
+                break
+        elif opcao == '2':
+            imprimir_mensagem()
+        elif opcao == '3':
+            imprimirMenuPrincipal() 
+            break
+        else:
+            print("Opção inválida. Por favor, escolha uma opção válida.")
+            input("[APERTE ENTER PARA CONTINUAR]")
+            limparTela()
+
 while not fimPrograma:
+    limparTela()
     imprimirMenuPrincipal()
     opcao = input("Escolha uma das opções: ")
 
-    if opcao in ("0", "1", "2", "3", "4"):
+    if opcao in ("0", "1", "2", "3", "4","5"):
         
         if int(opcao) == 1:
             AdicionarContato()
-        elif int(opcao) == 2:
-            MostrarContatos()
+        elif int(opcao) == 2: 
+            escrever_mensagem()
         elif int(opcao) == 3:
-            EditarContato()
+            MostrarContatos()
         elif int(opcao) == 4:
-            EscreverMensagem()
+            EditarContato()
+        elif int(opcao) == 5:
+            Enviarmensagem()
         elif int(opcao) == 0:
             fimPrograma = True
     else:
