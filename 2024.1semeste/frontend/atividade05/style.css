@@ -1,0 +1,24 @@
+.primeira {
+    /* largura da borda */
+    border-width: 2px;
+    /* estilo da borda */
+    border-style: solid;
+    /* cor da borda */
+    border-color: red;
+    /* tamanho da largura */
+    width: 300px;
+    /* altura */
+    height: 250px;
+    /* preenchiemnto em todos os lados */
+    padding: 30px;
+    margin-bottom: 30px;
+    margin-inline: auto;
+}
+
+.segunda {
+    /* shorthand border > varios valores para a mesma propriedade */
+    border: 2px solid black;
+    width: 300px;
+    height: 250px;
+    padding: 10px 15px 20px 30px;
+}
